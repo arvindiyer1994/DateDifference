@@ -20,28 +20,38 @@ class DateDifference {
         int year       = m_secondDate[2];
         int daysToStartOfYear = day;
 
-        // For second date calculate time till start of the year
-        daysToStartOfYear = GetDaysToStartOfYear(daysToStartOfYear, month, year);
-        year = year - 1;
-
-        // Add the days in a year till we reach the year of first date
-        while (year >= m_firstDate[2]){
-            daysToStartOfYear = daysToStartOfYear + (DaysInFeb(year--) == 28 ? 365 : 366);
-        }
-
-        // For first date calculate the number of days till the start of the year
         int daysToStartOfFirstYear = m_firstDate[0];
         int firstMonth = m_firstDate[1];
         int firstYear = m_firstDate[2];
 
-        daysToStartOfFirstYear = GetDaysToStartOfYear(daysToStartOfFirstYear, firstMonth, firstYear);
+        CalculateDifferenceBetweenTwoDates(daysToStartOfFirstYear, firstMonth, firstYear, daysToStartOfYear, month, year);
 
-        m_differenceDays = daysToStartOfYear - daysToStartOfFirstYear;
         System.out.println(m_firstDate[0] + " " + m_firstDate[1] + " " + m_firstDate[2] + ", " +
-                        m_secondDate[0] + " " + m_secondDate[1] + " " + m_secondDate[2] + ", "
-                        + m_differenceDays
-                    );
+                m_secondDate[0] + " " + m_secondDate[1] + " " + m_secondDate[2] + ", "
+                + m_differenceDays
+        );
+    }
+
+     protected int CalculateDifferenceBetweenTwoDates(int daysFirstYear, int monthFirstYear, int yearFirstYear, int daysSecondYear, int monthSecondYear, int yearSecondYear) {
+        // For second date calculate time till start of the year
+        daysSecondYear = GetDaysToStartOfYear(daysSecondYear, monthSecondYear, yearSecondYear);
+        yearSecondYear = yearSecondYear - 1;
+
+        // Add the days in a year till we reach the year of first date
+        while (yearSecondYear >= yearFirstYear){
+            daysSecondYear = daysSecondYear + (DaysInFeb(yearSecondYear--) == 28 ? 365 : 366);
         }
+
+        // For first date calculate the number of days till the start of the year
+
+
+        daysFirstYear = GetDaysToStartOfYear(daysFirstYear, monthFirstYear, yearFirstYear);
+
+        m_differenceDays = daysSecondYear - daysFirstYear;
+
+        return m_differenceDays;
+
+    }
 
     protected int GetDaysToStartOfYear(int days, int month, int year) {
         try {
